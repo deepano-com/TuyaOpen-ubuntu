@@ -13,6 +13,11 @@
 
 #if defined(__aarch64__) || defined(__ARM_ARCH_ISA_A64)
 
+/* GCC/glibc has no __f32x4_t/__f64x2_t (ARMCLANG MVE types); define
+ * equivalents via vector extensions (DP-X5 fix). */
+typedef float __f32x4_t __attribute__((vector_size(16)));
+typedef double __f64x2_t __attribute__((vector_size(16)));
+
 // Types and declarations are already in bits/math-vector.h (included via math.h)
 // We only provide the implementation here
 
