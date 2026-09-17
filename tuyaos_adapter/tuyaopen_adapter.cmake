@@ -235,3 +235,19 @@ if(CONFIG_ENABLE_AUDIO)
     include_directories("${AUDIO_LIB_PATH}/alsa/include")
 endif()
 
+# npu files (D-Robotics X5 BPU; auto-skipped when libdnn is absent, e.g. x86 CI)
+if(EXISTS "/usr/lib/libdnn.so")
+    file(GLOB NPU_SRC "${CMAKE_CURRENT_LIST_DIR}/src/tkl_npu/*.c")
+    list(APPEND SOURCES ${NPU_SRC})
+    include_directories(
+        ${CMAKE_CURRENT_LIST_DIR}/include/npu
+        /usr/include/dnn
+    )
+
+    ## hobot dnn runtime (system library, not shipped in repo)
+    collect_library("/usr/lib" "dnn")
+    message(STATUS "NPU support enabled (X5 BPU)")
+else()
+    message(STATUS "NPU support skipped (libdnn.so not found)")
+endif()
+
